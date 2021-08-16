@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:json-logger="http://www.mulesoft.org/schema/mule/json-logger"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/mule/json-logger/current/mule-json-logger.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+  <json-logger:config name="JSON_Logger_Config" doc:name="JSON Logger Config" doc:id="1dda7ade-14bb-4dcf-aacb-32d614d3a4b9" applicationVersion="1.0" environment="dev" applicationName="JSONLoggerDemo"/>
+  <http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="e9db388e-7a09-44d3-9ef7-87fb12600ffe" >
+    <http:listener-connection host="0.0.0.0" port="8081" />
+  </http:listener-config>
+  <flow name="schedulepocFlow" doc:id="98a8b0ec-b348-40c0-9803-1c632c079f87" >
+    <http:listener doc:name="Listener" doc:id="fc18b80d-681f-4a98-ba26-2dc377e5dbcc" config-ref="HTTP_Listener_config" path="/schedulepoc" allowedMethods="GET"/>
+    <ee:transform doc:name="Transform Message" doc:id="b1121f0b-8463-40b1-9725-528c82752137" >
+      <ee:message >
+        <ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"message" : "Success Schedule process"
+}]]></ee:set-payload>
+      </ee:message>
+    </ee:transform>
+    <json-logger:logger doc:name="Logger" doc:id="23c2c78c-55f8-4e0f-a48f-bb17925a7feb" config-ref="JSON_Logger_Config" message="Success Message">
+    </json-logger:logger>
+  </flow>
+</mule>
